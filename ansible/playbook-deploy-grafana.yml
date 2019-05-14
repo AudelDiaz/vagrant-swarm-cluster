@@ -1,0 +1,14 @@
+- hosts: manager
+  tasks:
+  - git:
+        repo: 'https://github.com/stefanprodan/swarmprom.git'
+        dest: /home/vagrant/swarmprom
+        update: no
+
+  - name: Deploy grafana
+    shell: docker stack deploy -c docker-compose.yml mon
+    args:
+      chdir: /home/vagrant/swarmprom/
+    environment:
+        ADMIN_USER:admin
+        ADMIN_PASSWORD:admin

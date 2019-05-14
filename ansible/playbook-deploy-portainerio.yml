@@ -1,0 +1,12 @@
+- hosts: manager
+  tasks:
+  - name: Download portainer-agent-stack.yml
+    get_url:
+      url: https://downloads.portainer.io/portainer-agent-stack.yml
+      dest: /home/vagrant/portainer-agent-stack.yml
+      mode: 0640
+
+  - name: Deploy portainer.io
+    shell: docker stack deploy -c portainer-agent-stack.yml portainer
+    args:
+      chdir: /home/vagrant/

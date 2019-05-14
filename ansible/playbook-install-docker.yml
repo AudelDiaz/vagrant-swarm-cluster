@@ -1,0 +1,35 @@
+- hosts: nodes
+  become: yes
+  vars:
+    user: vagrant
+  tasks:
+  - name: Add an Apt signing key, uses whichever key is at the URL
+    apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+  - apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+        state: present
+
+  - name:    Install prerequisites
+    apt: 
+        name:"{{ packages }}"
+    vars:
+        packages:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+
+  - name:    Install Docker
+    apt: 
+        name: docker-ce
+
+  - name: Adding existing user '{{ user }}' to group docker
+    user: name='{{ user }}'
+          groups=docker
+          append=yes
+
+  - name: Unconditionally reboot the machine with all defaults
+    reboot:
