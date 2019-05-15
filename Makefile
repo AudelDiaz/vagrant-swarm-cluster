@@ -2,7 +2,6 @@ default:
 	vagrant up
 init:
 	vagrant up
-	vagrant provision
 	./start_cluster.sh
 docker:
 	vagrant provision
